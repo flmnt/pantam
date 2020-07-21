@@ -17,6 +17,7 @@ pytest = "^5.4.3"
 black = "^19.10b0"
 autohooks-plugin-pylint = "^1.2.0"
 autohooks-plugin-black = "^1.2.0"
+mypy = "^0.782"
 
 [tool.autohooks]
 mode = "poetry"
