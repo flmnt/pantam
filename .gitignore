@@ -2,3 +2,4 @@ __pycache__
 .python-version
 .pytest_cache
 .mypy_cache
+.testmondata
