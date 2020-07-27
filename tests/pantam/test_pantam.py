@@ -109,7 +109,7 @@ def test_log_routes(logger_mock):
     app.actions = [
         {
             "file_name": "index.py",
-            "path_name": "index",
+            "module_name": "index",
             "action_class": MockAction,
             "action_obj": action_object,
             "routes": [
@@ -134,14 +134,14 @@ def test_discover_actions():
     expected = [
         {
             "file_name": "index.py",
-            "path_name": "index",
-            "module_name": "Index",
+            "module_name": "index",
+            "class_name": "Index",
             "routes": [],
         },
         {
             "file_name": "auth_test.py",
-            "path_name": "auth-test",
-            "module_name": "AuthTest",
+            "module_name": "auth-test",
+            "class_name": "AuthTest",
             "routes": [],
         },
     ]
@@ -151,8 +151,8 @@ def test_discover_actions():
 @patch("pantam.pantam.Logger.error")
 def test_import_action_module(logger_mock):
     app = Pantam()
-    app.import_action_module("Index")
-    logger_mock.assert_called_with("Unable to load `actions.Index` module.")
+    app.import_action_module("index", "Index")
+    logger_mock.assert_called_with("Unable to load `actions.index` module.")
 
 
 def test_load_actions():
@@ -165,8 +165,8 @@ def test_load_actions():
     assert actions[0]["action_class"] == MockAction
     assert isinstance(actions[0]["action_obj"], MockAction)
     assert actions[0]["file_name"] == "index.py"
-    assert actions[0]["path_name"] == "index"
-    assert actions[0]["module_name"] == "Index"
+    assert actions[0]["module_name"] == "index"
+    assert actions[0]["class_name"] == "Index"
     assert actions[0]["routes"] == []
 
 
@@ -229,8 +229,8 @@ def test_bind_routes_error(logger_mock):
         return_value=[
             {
                 "file_name": "index.py",
-                "path_name": "index",
                 "module_name": "index",
+                "class_name": "index",
                 "action_class": MockEmptyAction,
                 "action_obj": MockEmptyAction(),
             },
@@ -254,8 +254,8 @@ def test_bind_routes():
         return_value=[
             {
                 "file_name": "index.py",
-                "path_name": "index",
                 "module_name": "index",
+                "class_name": "index",
                 "action_class": MockSmallAction,
                 "action_obj": MockSmallAction(),
             },

@@ -25,8 +25,8 @@ class ActionRoute(TypedDict):
 
 class ActionResource(TypedDict, total=False):
     file_name: str
-    path_name: str
     module_name: str
+    class_name: str
     action_class: Callable[[], Any]
     action_obj: Any
     routes: List[ActionRoute]
@@ -172,24 +172,27 @@ class Pantam:
         action_files = self.read_actions_folder()
         actions: List[ActionResource] = []
         for file_name in action_files:
-            path_name = file_name.replace("_", "-").replace(".py", "")
-            module_name = path_name.replace("-", " ").title().replace(" ", "")
+            module_name = file_name.replace("_", "-").replace(".py", "")
+            class_name = module_name.replace("-", " ").title().replace(" ", "")
             actions.append(
                 {
                     "file_name": file_name,
-                    "path_name": path_name,
                     "module_name": module_name,
+                    "class_name": class_name,
                     "routes": [],
                 }
             )
         self.actions = actions
         return actions
 
-    def import_action_module(self, module_name: str) -> Union[Callable[[], Any], None]:
+    def import_action_module(
+        self, module_name: str, class_name: str
+    ) -> Union[Callable[[], Any], None]:
         """Load an action file"""
         try:
             actions_folder = self.get_config()["actions_folder"]
-            action_class: Any = import_module(module_name, actions_folder)
+            action_module: Any = import_module("%s.%s" % (actions_folder, module_name))
+            action_class: Any = getattr(action_module, class_name)
             return action_class
         except:
             self.logger.error(
@@ -203,22 +206,24 @@ class Pantam:
 
         def action_loader(action: ActionResource) -> ActionResource:
             try:
-                action_class = self.import_action_module(action["module_name"])
+                action_class = self.import_action_module(
+                    action["module_name"], action["class_name"]
+                )
                 if action_class is not None:
                     action["action_class"] = action_class
                     action["action_obj"] = action_class()
             except:
                 self.logger.error(
-                    "Unable to instantiate `%s` action class." % action["module_name"]
+                    "Unable to instantiate `%s` action class." % action["class_name"]
                 )
             return action
 
         self.actions = list(map(action_loader, actions))
 
-    def make_url(self, path_name: str, method: str) -> str:
+    def make_url(self, module_name: str, method: str) -> str:
         """Create URL for action routes"""
         actions_index = self.get_config()["actions_index"]
-        url = "/" if actions_index == path_name else "/%s/" % path_name
+        url = "/" if actions_index == module_name else "/%s/" % module_name
         is_individual_res = match(INDI_RES_RE, method)
         if is_individual_res:
             url = "%s{id}" % url
@@ -257,12 +262,12 @@ class Pantam:
 
         for action in actions:
             try:
-                routes = self.make_routes(action["path_name"], action["action_class"])
+                routes = self.make_routes(action["module_name"], action["action_class"])
                 action["routes"] = routes
 
                 if len(routes) == 0:
                     self.logger.error(
-                        "No methods found for `%s` action." % action["path_name"]
+                        "No methods found for `%s` action." % action["module_name"]
                     )
                     continue
 
@@ -279,29 +284,30 @@ class Pantam:
                     )
             except:
                 self.logger.error(
-                    "Unable to bind `%s` action methods to route." % action["path_name"]
+                    "Unable to bind `%s` action methods to route."
+                    % action["module_name"]
                 )
 
         self.routes = starlette_routes
 
-    def get_routes(self) -> List[Route]:
+    def get_routes(self, skip_check: bool = False) -> List[Route]:
         """Get underlying Starlette routes"""
-        if len(self.routes) == 0:
+        if len(self.routes) == 0 and skip_check is False:
             self.logger.error("No routes have been defined.")
         return self.routes
 
     def extend(self, callback: Callable[[Optional[List[Route]]], List[Route]]) -> None:
         """Extend Starlette routes"""
-        routes = self.get_routes()
+        routes = self.get_routes(True)
         new_routes = callback(routes)
         self.routes = new_routes
 
     def build(self) -> Optional[Starlette]:
         """Run Bantam application"""
-        routes = self.get_routes()
         self.discover_actions()
         self.load_actions()
         self.bind_routes()
+        routes = self.get_routes()
         try:
             return Starlette(routes=routes, debug=self.debug)
         except:
