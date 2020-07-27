@@ -367,6 +367,20 @@ We welcome feedback, suggestions and contributions.
 
 If you have an idea you want to discuss please [open an issue](https://github.com/FilamentSolutions/pantam/issues/new).
 
+### Testing
+
+To run package tests once use:
+
+```
+% ptw
+```
+
+To run then when files change use:
+
+```
+% pytest
+```
+
 ## Licenses
 
 Free for personal and commerical use under the [MIT License](https://github.com/FilamentSolutions/pantam/blob/master/LICENSE.md)
