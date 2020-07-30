@@ -7,14 +7,13 @@ Pantam is an extensible, ultra lightweight, Python framework for creating RESTfu
 Features include:
 
 - built on top of [Starlette](https://www.starlette.io/)
-- statically typed with [mypy](https://github.com/python/mypy)
 - simple REST routing
 - [segregated business logic](https://en.wikipedia.org/wiki/Separation_of_concerns)
 - [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) paradigm
 - expressive logging (decent error reporting!)
 - live reloading in developer mode
 
-Need to build a Python microservice? [Check out Pantam](https://github.com/flmnt/pantam)
+Need to build a Javascript microservice? [Check out Bantam](https://github.com/flmnt/bantam)
 
 ## Getting started
 
@@ -29,16 +28,26 @@ With Pantam you can create a basic REST API in 5 minutes or less.
 
 ### Installation
 
-First, install the required packages.
+We recommend using [Poetry](https://python-poetry.org/) for dependency and environment management (this documentation will use Poetry throughout) but if you prefer `pip` or `conda` then crack on!
+
+If you haven't done so already, setup your python environment and Poetry project:
 
 ```
-% poetry add @flmnt/pantam
+% pyenv install 3.8.2
+% pyenv local 3.8.2
+% poetry init
 ```
 
-Once you have installed Pantam you can initialise your app; this can be done with either a brand new or existing app.
+Now install the Pantam package:
 
 ```
-% poetry @flmnt/pantam init
+% poetry add pantam
+```
+
+Once you have installed Pantam you can initialise your app.
+
+```
+% pantam init
 ```
 
 Follow the CLI instructions and then start building your microservice!
@@ -57,11 +66,11 @@ Pantam expects the following folder structure:
 In the root level `index.py` file add the following to run Pantam:
 
 ```
-import Pantam from '@flmnt/pantam';
+from pantam import Pantam
 
-const app = new Pantam();
+pantam = Pantam()
 
-app.run();
+app = pantam.build()
 ```
 
 In the `actions` folder create the following files.
@@ -71,15 +80,15 @@ In the `actions` folder create the following files.
 ```
 class Index {
 
-  fetchAll: () => { ... },
+  fetch_all: () => { ... },
 
-  fetchSingle: (id) => { ... },
+  fetch_single: (uid) => { ... },
 
-  create: (data, ctx) => { ... },
+  create: (data) => { ... },
 
-  update: (id, data, ctx) => { ... },
+  update: (uid, data) => { ... },
 
-  delete: (id) => { ... },
+  delete: (uid) => { ... },
 
 }
 ```
@@ -89,11 +98,11 @@ class Index {
 ```
 class Other {
 
-  fetchSingle: (id) => { ... },
+  fetch_single: (id) => { ... },
 
-  create: (data, ctx) => { ... },
+  create: (data) => { ... },
 
-  // NB: add as few methods as you need...
+  # NB: add as few methods as you need...
 
 }
 ```
@@ -101,13 +110,13 @@ class Other {
 The setup above will make the following routes available:
 
 ```
-GET      /            // Index.fetchAll()
-GET      /:id         // Index.fetchSingle()
+GET      /            // Index.fetch_all()
+GET      /:id         // Index.fetch_single()
 POST     /            // Index.create()
 PATCH    /:id         // Index.update()
 DELETE   /:id         // Index.delete()
 
-GET      /other/:id   // Other.fetchSingle()
+GET      /other/:id   // Other.fetch_single()
 POST     /other       // Other.create()
 ```
 
@@ -118,10 +127,10 @@ And that's you ready to go!
 Start the development server with:
 
 ```
-% npx @flmnt/pantam serve --dev
+% pantam serve --dev
 ```
 
-Your application will be served on http://localhost:3000
+Your application will be served on http://localhost:5000
 
 In development mode, when you make changes to files the application will update itself.
 
@@ -130,43 +139,44 @@ In development mode, when you make changes to files the application will update 
 To serve your microservice in production use:
 
 ```
-% npx @flmnt/pantam serve
+% pantam serve
 ```
 
-Your application is served at http://your-host:3000
+Your application is served at http://your-host:5000
 
 You can change the port number via the configuration options.
 
-## .pantamrc.py
+## .pantamrc.json
 
-After running `npx @flmnt/pantam init` you will have a `.pantamrc.json` file in your directory with some CLI config options like this:
+After running `pantam init` you will have a `.pantamrc.json` file in your directory with some CLI config options like this:
 
 ```
-module.exports = {
-  actionsFolder: 'actions',
-  language: 'typescript',
-  entrypoint: 'index.py',
-};
+{
+  "actions_folder": "actions"
+  "entrypoint": "example.py"
+  "dev_port": 5000
+  "port": 5000
+}
 ```
 
-The `.pantamrc` file provides configuration options for the CLI. You only need to change it if you switch language, change your main file (entrypoint) or rename your actions folder.
+The `.pantamrc.json` file provides configuration options for the CLI. You only need to change it if you want to serve the application on different ports, change your main file (entrypoint) or rename your actions folder.
 
 ## Add New Routes
 
 To add a new action (resource) you can either create a new file in the actions folder or use the CLI to make the file for you:
 
 ```
-% npx @flmnt/pantam action index.py
+% pantam action index.py
 ```
 
-You can add the standard methods (`fetchAll`, `fetchSingle`, `create`, `update`, `delete`) to an action class which will automatically create the standard routes.
+You can add the standard methods (`fetch_all`, `fetch_single`, `create`, `update`, `delete`) to an action class which will automatically create the standard routes.
 
 If you'd like to create custom methods for your action class you can create custom getters like this:
 
 ```
 // GET -> /custom-method/
-getCustomMethod(ctx) {
-  return ctx.body = 'Custom response';
+get_custom_method() {
+  # your code here
 }
 ```
 
@@ -174,191 +184,86 @@ And custom setters like this:
 
 ```
 // POST -> /custom-method/
-setCustomMethod(data, ctx) {
+set_custom_method(data) {
   console.log(data);
-  return ctx.body = 'Custom response';
+  # your code here
 }
 ```
 
-Pantam will ignore methods that are not "standard" methods or do not start with `get` or `set`. However if you want to _ensure_ that your method will be ignored you can prefix the method with an underscore, like this:
+Pantam will ignore methods that are not "standard" methods or do not start with `get` or `set`. However if you want to _ensure_ that your method will be ignored you can prefix the method with a double underscore, like this:
 
 ```
-_myHiddenMethod() {
+__my_hidden_method() {
   // do something secret
 }
 ```
 
 ## Creating Responses
 
-Each method in an action file is passed a context (ctx) argument which you use to build a response. You can read the Koa [context API here](https://github.com/koajs/koa/blob/master/docs/api/context.md).
+To create a response, make use of the [Starlette response API](https://www.starlette.io/responses/), you can import all responses from starlette or import common responses from Pantam directly, including: `JSONResponse`, `HTMLResponse`, `PlainTextResponse`, `FileResponse`, `RedirectResponse`.
 
-Creating standard responses is very straightforward.
+Here are a few examples:
 
 ```
-fetchAll(ctx) {
-  ctx.body = 'Your response here';
-}
+from pantam import PlainTextResponse
+
+class YourClass:
+  def fetch_all():
+    return PlainTextResponse("This is fetch all!")
+```
+
+```
+from pantam import JSONResponse
+
+class YourClass:
+  def fetch_all():
+    return JSONResponse([{ "content": "example" }])
 ```
 
 Changing status code is also simple.
 
 ```
-fetchAll(ctx) {
-  ctx.body = 'Your response here';
-  ctx.status = 201;
+fetch_all() {
+  return PlainTextResponse("This is fetch all!", status_code=404)
 }
 ```
 
-Adjusting headers requires you to use the `ctx.set()` method.
+Adjusting headers can also be achieved.
 
 ```
-fetchAll(ctx) {
-  ctx.body = 'Your response here';
-  ctx.status = 201;
-  ctx.set('Cache-Control', 'no-cache');
+fetch_all() {
+  headers = {
+    "Cache-Control": "no-cache"
+  }
+  return PlainTextResponse("This is fetch all!", headers=headers)
 }
 ```
-
-## Async/Await Support
-
-Feel free to create synchronous or asynchronous action, methods. Pantam can handle both.
-
-```
-async getAsyncExample() {
-  const result = await findRecords();
-  ctx.body = result;
-}
-
-getSyncExample() {
-  ctx.body = 'static content';
-}
-```
-
-## Configuration Options
-
-For advanced configuration pass an options object when instantiating Pantam.
-
-```
-import Pantam from '@flmnt/pantam';
-
-const options = {
-  port: 80,
-  ...
-};
-
-const app = new Pantam(options);
-
-app.run();
-```
-
-The options object can have the following properties:
-
-**port**: `integer`
-
-Sets the port number when serving the app in production mode.
-
-`Default: 3000`
-
-<br>
-
-**devPort**: `integer`
-
-Sets the port number when serving the app in development mode.
-
-`Default: 3000`
-
-<br>
-
-**actionsFolder**: `string`
-
-The folder that contains your action files.
-
-`Default: "actions"`
-
-<br>
-
-**actionsIndexFile**: `string`
-
-The primary action file in your action folder.
-
-`Default: "index"`
-
-<br>
-
-**actionsFileExt**: `string`
-
-The file extension for action files.
-
-`Default: "ts"`
-
-## Extending Pantam
-
-Pantam has been built on top of [Koa](https://github.com/koajs/koa), to expose the Koa application and extend Pantam's functionality you can do the following:
-
-```
-import Pantam from '@flmnt/pantam';
-
-const app = new Pantam();
-
-app.extend((koaApp) => {
-
-  koaApp.use(async (ctx, next) => {
-    // your code here...
-    await next();
-  });
-
-  return koaApp;
-});
-
-app.run();
-```
-
-If you need to add middlewear to specific routes, you'll likely want to interact with the Pantam router, which is provided by [Koa Router](https://github.com/ZijianHe/koa-router).
-
-```
-import Pantam from '@flmnt/pantam';
-
-const app = new Pantam();
-
-app.extend((koaApp, koaRouter) => {
-
-  koaApp.use(initMiddlewear());
-
-  koaRouter.use('/url', useMiddlewear());
-
-  return [koaApp, koaRouter];
-});
-
-app.run();
-```
-
-_NB: if you adjust the router as well as the Koa app, make sure your callback returns an array with the app and then the router (in that order)_
 
 ## Debugging
 
-If you're struggling to debug and issue and unsure what routes Pantam has created for you, you can use `logRoutes()` to find out.
+If you're struggling to debug and issue and unsure what routes Pantam has created for you, set the `debug` option to True.
 
 ```
-const app = new Pantam();
+from pantam import Pantam
 
-app.run().then((app) => {
-  app.logRoutes();
-});
+pantam = Pantam(debug=True)
+
+app = pantam.build()
 ```
 
 Also check trailing slashes in your urls, these are important.
 
-In the example below the url `test/1` and `test/custom-method` both trigger `fetchSingle()` but the url `test/custom-method/` (with the trailing slash) triggers `getCustomMethod()`.
+In the example below the url `test/1` and `test/custom-method` both trigger `fetch_single()` but the url `test/custom-method/` (with the trailing slash) triggers `get_custom_method()`.
 
 ```
 // actions/test.py
 
 // GET -> test/custom-method
 // GET -> test/:id
-fetchSingle() {}
+fetch_single() {}
 
 // GET -> test/custom-method/
-getCustomMethod() {}
+get_custom_method() {}
 ```
 
 ## Contribution
@@ -367,22 +272,6 @@ We welcome feedback, suggestions and contributions.
 
 If you have an idea you want to discuss please [open an issue](https://github.com/FilamentSolutions/pantam/issues/new).
 
-### Testing
-
-To run package tests once use:
-
-```
-% ptw
-```
-
-To run then when files change use:
-
-```
-% pytest
-```
-
 ## Licenses
 
 Free for personal and commerical use under the [MIT License](https://github.com/FilamentSolutions/pantam/blob/master/LICENSE.md)
-
-_Basil the Pantam_ was created with a free vector from [Vectorportal.com](https://vectorportal.com)
