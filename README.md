@@ -38,6 +38,8 @@ If you haven't done so already, setup your python environment and Poetry project
 % poetry init
 ```
 
+_NB: if you specify pantam as a package during the setup process, run `poetry install` and skip the next step._
+
 Now install the Pantam package:
 
 ```
@@ -47,6 +49,7 @@ Now install the Pantam package:
 Once you have installed Pantam you can initialise your app.
 
 ```
+% poetry shell
 % pantam init
 ```
 
