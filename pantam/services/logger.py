@@ -3,7 +3,7 @@ from sys import stdout
 from mypy_extensions import Arg
 from colored import fg, attr
 
-BANTAM: str = fg("yellow") + attr("bold") + "BANTAM: " + attr("reset")
+PANTAM: str = fg("yellow") + attr("bold") + "PANTAM: " + attr("reset")
 
 WriteStream = Callable[[Arg(str, "s")], int]
 
@@ -17,7 +17,7 @@ class Logger:
 
     def __write(self, message: str) -> None:
         """Write message to stdout."""
-        self.write_stream(str(BANTAM + message) + "\n")
+        self.write_stream(str(PANTAM + message) + "\n")
 
     def info(self, message: str) -> None:
         """Print info message."""

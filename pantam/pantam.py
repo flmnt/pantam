@@ -123,7 +123,7 @@ class Pantam:
         return files
 
     def get_actions(self) -> List[ActionResource]:
-        """Get Bantam actions"""
+        """Get Pantam actions"""
         if len(self.actions) == 0:
             self.logger.error(
                 "You have no loaded actions. Check for files in the actions folder."
@@ -131,7 +131,7 @@ class Pantam:
         return self.actions
 
     def log_routes(self) -> None:
-        """Print Bantam routes in human readable format"""
+        """Print Pantam routes in human readable format"""
         actions = self.get_actions()
 
         routes: List[ActionRoute] = []
@@ -303,7 +303,7 @@ class Pantam:
         self.routes = new_routes
 
     def build(self) -> Optional[Starlette]:
-        """Run Bantam application"""
+        """Run Pantam application"""
         self.discover_actions()
         self.load_actions()
         self.bind_routes()
