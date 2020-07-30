@@ -78,33 +78,32 @@ In the `actions` folder create the following files.
 `actions/index.py`
 
 ```
-class Index {
+class Index:
+  def fetch_all(self):
+    pass
 
-  fetch_all: () => { ... },
+  def fetch_single(self, uid):
+    pass
 
-  fetch_single: (uid) => { ... },
+  def create(self, data):
+    pass
 
-  create: (data) => { ... },
+  def update(self, uid, data):
+    pass
 
-  update: (uid, data) => { ... },
-
-  delete: (uid) => { ... },
-
-}
+  def delete(self, uid):
+    pass
 ```
 
 `actions/other.py`
 
 ```
-class Other {
+class Other:
+  def fetch_single(self, uid):
+    pass
 
-  fetch_single: (id) => { ... },
-
-  create: (data) => { ... },
-
-  # NB: add as few methods as you need...
-
-}
+  def create(self, data):
+    pass
 ```
 
 The setup above will make the following routes available:
@@ -175,27 +174,24 @@ If you'd like to create custom methods for your action class you can create cust
 
 ```
 // GET -> /custom-method/
-get_custom_method() {
+def get_custom_method(self):
   # your code here
-}
 ```
 
 And custom setters like this:
 
 ```
 // POST -> /custom-method/
-set_custom_method(data) {
-  console.log(data);
+def set_custom_method(self, data):
+  print(data)
   # your code here
-}
 ```
 
 Pantam will ignore methods that are not "standard" methods or do not start with `get` or `set`. However if you want to _ensure_ that your method will be ignored you can prefix the method with a double underscore, like this:
 
 ```
-__my_hidden_method() {
+def __my_hidden_method(self):
   // do something secret
-}
 ```
 
 ## Creating Responses
@@ -223,20 +219,18 @@ class YourClass:
 Changing status code is also simple.
 
 ```
-fetch_all() {
+def fetch_all(self):
   return PlainTextResponse("This is fetch all!", status_code=404)
-}
 ```
 
 Adjusting headers can also be achieved.
 
 ```
-fetch_all() {
+def fetch_all(self):
   headers = {
     "Cache-Control": "no-cache"
   }
   return PlainTextResponse("This is fetch all!", headers=headers)
-}
 ```
 
 ## Debugging
@@ -260,10 +254,10 @@ In the example below the url `test/1` and `test/custom-method` both trigger `fet
 
 // GET -> test/custom-method
 // GET -> test/:id
-fetch_single() {}
+fetch_single()
 
 // GET -> test/custom-method/
-get_custom_method() {}
+get_custom_method()
 ```
 
 ## Contribution
