@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess
 import sys
 from pantam.cli.utils.filesystem import load_pantamrc_file

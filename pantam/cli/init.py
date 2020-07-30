@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from typing import List
 from os import getcwd, path
 from pathlib import Path
