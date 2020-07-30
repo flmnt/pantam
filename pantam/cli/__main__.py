@@ -1,26 +1,31 @@
 #!/usr/bin/env python3
 
 import typer
-
-app = typer.Typer()
-
-# this is a temporary example file
-
-
-@app.command()
-def hello(name: str):
-    """Say hello"""
-    typer.echo(f"Hello {name}")
+from pantam.cli.action import run_action
+from pantam.cli.init import run_init
+from pantam.cli.serve import run_serve
 
 
-@app.command()
-def goodbye(name: str, formal: bool = False):
-    """Say goodbye"""
-    if formal:
-        typer.echo(f"Goodbye Ms. {name}. Have a good day.")
-    else:
-        typer.echo(f"Bye {name}!")
+cli = typer.Typer()
+
+
+@cli.command()
+def init():
+    """Configure a Pantam application"""
+    run_init()
+
+
+@cli.command()
+def action(file: str):
+    """Create a new action route"""
+    run_action(file)
+
+
+@cli.command()
+def serve(dev: bool = False):
+    """Create a new action route"""
+    run_serve(dev)
 
 
 if __name__ == "__main__":
-    app()
+    cli()

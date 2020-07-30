@@ -3,4 +3,4 @@ __pycache__
 .pytest_cache
 .mypy_cache
 .testmondata
-*.egg-info
+pantam.egg-info
