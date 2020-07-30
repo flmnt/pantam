@@ -3,12 +3,12 @@
 from os import getcwd
 from pathlib import Path
 import sys
-from pantam.scripts.utils.filesystem import (
+from pantam_cli.utils.filesystem import (
     create_file,
     make_class_name,
     load_pantamrc_file,
 )
-from pantam.scripts.utils.messages import (
+from pantam_cli.utils.messages import (
     info_msg,
     error_msg,
     success_msg,
@@ -16,8 +16,8 @@ from pantam.scripts.utils.messages import (
     write_msg,
     NewLine,
 )
-from pantam.scripts.utils.templates import action_template
-from pantam.scripts.utils import clear
+from pantam_cli.utils.templates import action_template
+from pantam_cli.utils import clear
 
 
 def action(action_file: str) -> None:

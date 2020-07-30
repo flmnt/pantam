@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pantam"
-version = "0.0.1-alpha.1"
+version = "0.0.1-alpha.2"
 description = "The microframework for microservices"
 authors = ["Matt Davies <matt@filament.so>"]
 license = "MIT"
@@ -27,7 +27,7 @@ pytest-watch = "^4.2.0"
 pytest-testmon = "^1.0.2"
 
 [tool.poetry.scripts]
-pantam = "pantam.scripts.cli:run"
+pantam = "pantam_cli.cli:run"
 
 [tool.autohooks]
 mode = "poetry"

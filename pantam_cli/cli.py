@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import typer
-from pantam.scripts.action import run_action
-from pantam.scripts.init import run_init
-from pantam.scripts.serve import run_serve
+from pantam_cli.action import run_action
+from pantam_cli.init import run_init
+from pantam_cli.serve import run_serve
 
 
 run = typer.Typer()
