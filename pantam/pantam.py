@@ -296,18 +296,14 @@ class Pantam:
             self.logger.error("No routes have been defined.")
         return self.routes
 
-    def extend(self, callback: Callable[[Optional[List[Route]]], List[Route]]) -> None:
-        """Extend Starlette routes"""
-        routes = self.get_routes(True)
-        new_routes = callback(routes)
-        self.routes = new_routes
-
     def build(self) -> Optional[Starlette]:
         """Run Pantam application"""
         self.discover_actions()
         self.load_actions()
         self.bind_routes()
         routes = self.get_routes()
+        if self.debug:
+            self.log_routes()
         try:
             return Starlette(routes=routes, debug=self.debug)
         except:

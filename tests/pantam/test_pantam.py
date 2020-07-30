@@ -274,13 +274,6 @@ def test_get_routes(logger_mock):
     logger_mock.assert_called_with("No routes have been defined.")
 
 
-def test_extend():
-    app = Pantam()
-    app.routes = ["test"]
-    app.extend(lambda x: ["foo", "bar"])
-    assert app.routes == ["foo", "bar"]
-
-
 @patch("pantam.pantam.Starlette")
 @patch("pantam.pantam.Logger.error")
 def test_prepare_error(logger_mock, app_mock):

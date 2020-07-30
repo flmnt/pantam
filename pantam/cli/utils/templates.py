@@ -8,7 +8,7 @@ app = pantam.build()
 )
 
 
-action_template = lambda class_name: """from starlette.responses import PlainTextResponse
+action_template = lambda class_name: """from pantam import PlainTextResponse
 
 class {class_name}:
     def fetch_all(self):
