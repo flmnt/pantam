@@ -1,6 +1,6 @@
 # pantam
 
-<img src="https://raw.githubusercontent.com/FilamentSolutions/pantam/master/logo/logo.png" alt="Peter the Pantam Python" width="300">
+<img src="https://raw.githubusercontent.com/flmnt/pantam/master/logo/logo.png" alt="Peter the Pantam Python" width="300">
 
 Pantam is an extensible, ultra lightweight, Python framework for creating RESTful microservices.
 
@@ -270,8 +270,8 @@ get_custom_method() {}
 
 We welcome feedback, suggestions and contributions.
 
-If you have an idea you want to discuss please [open an issue](https://github.com/FilamentSolutions/pantam/issues/new).
+If you have an idea you want to discuss please [open an issue](https://github.com/flmnt/pantam/issues/new).
 
 ## Licenses
 
-Free for personal and commerical use under the [MIT License](https://github.com/FilamentSolutions/pantam/blob/master/LICENSE.md)
+Free for personal and commerical use under the [MIT License](https://github.com/flmnt/pantam/blob/master/LICENSE.md)
