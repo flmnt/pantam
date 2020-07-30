@@ -3,7 +3,7 @@ from os import getcwd, mkdir
 from json import dumps, loads
 from pathlib import Path
 import sys
-from pantam.cli.utils.messages import error_msg, write_error
+from cli.utils.messages import error_msg, write_error
 
 
 def create_file(file_path: Union[str, Path], data: str) -> None:

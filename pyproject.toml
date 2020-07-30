@@ -26,8 +26,7 @@ pytest-watch = "^4.2.0"
 pytest-testmon = "^1.0.2"
 
 [tool.poetry.scripts]
-test = "pytest:main"
-"test:watch" = "pytest_watch:main"
+pantam = "cli:run"
 
 [tool.autohooks]
 mode = "poetry"

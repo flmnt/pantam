@@ -3,8 +3,8 @@
 from os import getcwd
 from pathlib import Path
 import sys
-from .utils.filesystem import create_file, make_class_name, load_pantamrc_file
-from .utils.messages import (
+from cli.utils.filesystem import create_file, make_class_name, load_pantamrc_file
+from cli.utils.messages import (
     info_msg,
     error_msg,
     success_msg,
@@ -12,8 +12,8 @@ from .utils.messages import (
     write_msg,
     NewLine,
 )
-from .utils.templates import action_template
-from .utils import clear
+from cli.utils.templates import action_template
+from cli.utils import clear
 
 
 def action(action_file: str) -> None:

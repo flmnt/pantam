@@ -4,13 +4,13 @@ from typing import List
 from os import getcwd, path
 from pathlib import Path
 from PyInquirer import prompt
-from pantam.cli.utils.filesystem import (
+from cli.utils.filesystem import (
     create_file,
     create_folder,
     make_class_name,
     create_pantamrc_file,
 )
-from pantam.cli.utils.messages import (
+from cli.utils.messages import (
     info_msg,
     error_msg,
     success_msg,
@@ -24,9 +24,9 @@ from pantam.cli.utils.messages import (
     create_actions_file_msg,
     confirm_structure_msg,
 )
-from pantam.cli.utils.templates import action_template, index_template
-from pantam.cli.utils.errors import CancelError
-from pantam.cli.utils import clear
+from cli.utils.templates import action_template, index_template
+from cli.utils.errors import CancelError
+from cli.utils import clear
 
 
 def init() -> None:

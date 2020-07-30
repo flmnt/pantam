@@ -2,8 +2,8 @@
 
 import subprocess
 import sys
-from pantam.cli.utils.filesystem import load_pantamrc_file
-from pantam.cli.utils import clear
+from cli.utils.filesystem import load_pantamrc_file
+from cli.utils import clear
 
 
 def run_serve(dev_mode: bool) -> None:
