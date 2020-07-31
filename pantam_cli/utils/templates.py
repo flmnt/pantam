@@ -20,7 +20,7 @@ class {class_name}:
 
     def fetch_single(self, request):
         \"\"\"Fetch single item\"\"\"
-        id = request.path_params['id']
+        uid = request.path_params["id"]
         return PlainTextResponse("Pantam: {class_name} -> fetch_single()")
 
     def create(self, request):
@@ -29,12 +29,12 @@ class {class_name}:
 
     def update(self, request):
         \"\"\"Update an item\"\"\"
-        id = request.path_params['id']
+        uid = request.path_params["id"]
         return PlainTextResponse("Pantam: {class_name} -> update()")
 
     def delete(self, request):
         \"\"\"Delete single item\"\"\"
-        id = request.path_params['id']
+        uid = request.path_params["id"]
         return PlainTextResponse("Pantam: {class_name} -> delete()")
 """.format(
     class_name=class_name
