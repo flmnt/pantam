@@ -1,11 +1,10 @@
 from typing import Callable, Optional
 from sys import stdout
-from mypy_extensions import Arg
 from colored import fg, attr
 
 PANTAM: str = fg("yellow") + attr("bold") + "PANTAM: " + attr("reset")
 
-WriteStream = Callable[[Arg(str, "s")], int]
+WriteStream = Callable[[str], int]
 
 
 class Logger:
