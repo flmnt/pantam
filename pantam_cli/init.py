@@ -119,7 +119,7 @@ def init() -> None:
 
     try:
         write_msg(info_msg("Creating %s file..." % index_file),)
-        create_file(index_file, index_template(index_file.replace(".py")))
+        create_file(index_file, index_template(index_file.replace(".py", "")))
         create_file("__init__.py", "")
         write_msg(success_msg(" done!"), NewLine.after)
     except FileExistsError:

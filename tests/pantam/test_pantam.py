@@ -9,6 +9,10 @@ def test_get_default_options():
     default_config = {
         "actions_folder": "actions",
         "actions_index": "index",
+        "debug": False,
+        "dev_port": 5000,
+        "port": 5000,
+        "reload": None
     }
     assert app.get_config() == default_config
 
@@ -18,15 +22,30 @@ def test_override_some_options():
     default_config = {
         "actions_folder": "axs",
         "actions_index": "index",
+        "debug": False,
+        "dev_port": 5000,
+        "port": 5000,
+        "reload": None
     }
     assert app.get_config() == default_config
 
 
 def test_override_all_options():
-    app = Pantam(actions_folder="axs", actions_index="main")
+    app = Pantam(
+        actions_folder="axs",
+        actions_index="main",
+        debug=True,
+        dev_port=5001,
+        port=80,
+        reload=False
+    )
     default_config = {
         "actions_folder": "axs",
         "actions_index": "main",
+        "debug": True,
+        "dev_port": 5001,
+        "port": 80,
+        "reload": False
     }
     assert app.get_config() == default_config
 
@@ -284,8 +303,3 @@ def test_prepare_error(logger_mock, app_mock):
     app = Pantam()
     app.build()
     logger_mock.assert_called_with("Unable to build Pantam application!")
-
-
-def test_debug():
-    app = Pantam(debug=True)
-    assert app.debug
