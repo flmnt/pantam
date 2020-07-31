@@ -330,7 +330,8 @@ class Pantam:
         config = self.get_config()
         listen_port = (
             config["port"]
-            if environ["POETRY_ENV"] == "production"
+            if environ["POETRY_ENV"] is not None
+            and environ["POETRY_ENV"] == "production"
             else config["dev_port"]
         )
         watch_reload = config["debug"] if config["reload"] is None else config["reload"]
