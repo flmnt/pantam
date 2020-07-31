@@ -1,0 +1,7 @@
+event.py
+setup.py
+event.egg-info/PKG-INFO
+event.egg-info/SOURCES.txt
+event.egg-info/dependency_links.txt
+event.egg-info/requires.txt
+event.egg-info/top_level.txt

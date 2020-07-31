@@ -1,0 +1,7 @@
+domain.py
+setup.py
+domain.egg-info/PKG-INFO
+domain.egg-info/SOURCES.txt
+domain.egg-info/dependency_links.txt
+domain.egg-info/requires.txt
+domain.egg-info/top_level.txt
