@@ -337,4 +337,4 @@ class Pantam:
         try:
             run("%s:%s" % (file_name, app_name), port=listen_port, reload=watch_reload)
         except:
-            self.logger.error("Unable to build Pantam application!")
+            self.logger.error("Unable to run Pantam application!")
