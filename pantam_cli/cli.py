@@ -22,9 +22,9 @@ def action(file: str):
 
 
 @run.command()
-def serve(dev: bool = False):
+def serve():
     """Create a new action route"""
-    run_serve(dev)
+    run_serve()
 
 
 if __name__ == "__main__":

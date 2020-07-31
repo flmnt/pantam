@@ -7,6 +7,7 @@ Pantam is an extensible, ultra lightweight, Python framework for creating RESTfu
 Features include:
 
 - built on top of [Starlette](https://www.starlette.io/)
+- served using [Uvicorn](https://www.uvicorn.org/)
 - simple REST routing
 - [segregated business logic](https://en.wikipedia.org/wiki/Separation_of_concerns)
 - [convention over configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) paradigm
@@ -60,13 +61,13 @@ Follow the CLI instructions and then start building your microservice!
 Pantam expects the following folder structure:
 
 ```
-| index.py       // can have any name, it's where you run your app
+| main.py       // can have any name, it's where you run your app
 | actions        // where your domain logic sits
 |  |  index.py   // primary logic lives here (might be all you need)
 |  |  other.py   // add as many other "domains" as you like (optional)
 ```
 
-In the root level `index.py` file add the following to run Pantam:
+In the root level `main.py` file add the following to run Pantam:
 
 ```
 from pantam import Pantam
@@ -74,6 +75,9 @@ from pantam import Pantam
 pantam = Pantam()
 
 app = pantam.build()
+
+if __name__ == "__main__":
+    pantam.run("main", "app")
 ```
 
 In the `actions` folder create the following files.
@@ -126,15 +130,30 @@ And that's you ready to go!
 
 ### Development
 
-Start the development server with:
+Configure the application to live reload on a given port as follows:
 
 ```
-% pantam serve --dev
+from pantam import Pantam
+
+pantam = Pantam(reload=True, dev_port=5001)
+
+app = pantam.build()
+
+if __name__ == "__main__":
+    pantam.run("main", "app")
 ```
 
-Your application will be served on http://localhost:5000
+Then serve the app:
 
-In development mode, when you make changes to files the application will update itself.
+```
+% pantam serve
+```
+
+Your application will be served on http://localhost:5001
+
+In reload mode, when you make changes to files the application will update itself.
+
+_NB: If you turn `debug` on then `reload` is on by default._
 
 ### Production
 
@@ -154,14 +173,12 @@ After running `pantam init` you will have a `.pantamrc.json` file in your direct
 
 ```
 {
-  "actions_folder": "actions"
+  "actions_folder": "actions",
   "entrypoint": "example.py"
-  "dev_port": 5000
-  "port": 5000
 }
 ```
 
-The `.pantamrc.json` file provides configuration options for the CLI. You only need to change it if you want to serve the application on different ports, change your main file (entrypoint) or rename your actions folder.
+The `.pantamrc.json` file provides configuration options for the CLI. You only need to change it if you change your main file (entrypoint) or rename your actions folder.
 
 ## Add New Routes
 
@@ -235,6 +252,69 @@ def fetch_all(self):
   }
   return PlainTextResponse("This is fetch all!", headers=headers)
 ```
+
+## Configuration Options
+
+For advanced configuration pass an options in when instantiating Pantam.
+
+```
+from pantam import Pantam
+
+pantam = Pantam(debug=True, port=80) # add options as below
+
+app = pantam.build()
+
+if __name__ == "__main__":
+    pantam.run("main", "app")
+```
+
+You can set the following options:
+
+**port**: `integer`
+
+Sets the port number when serving the app in production mode.
+
+`Default: 5000`
+
+<br>
+
+**dev_port**: `integer`
+
+Sets the port number when serving the app in development mode.
+
+`Default: 5000`
+
+<br>
+
+**debug**: `bool`
+
+Turns debugging mode on for Pantam (and underlying Starlette). Provides more verbose error messages. Should be off in production. _If `reload` is not specified and `debug` is on, `reload` is also on._
+
+`Default: False`
+
+<br>
+
+**reload**: `bool` | `None`
+
+Turns reload mode on for Pantam. Application will restart when files change. _If `debug` is on, `reload` will be on by default, unless set to `False`._
+
+`Default: None`
+
+<br>
+
+**actions_folder**: `string`
+
+The folder that contains your action files.
+
+`Default: "actions"`
+
+<br>
+
+**actions_index**: `string`
+
+The primary action file in your action folder.
+
+`Default: "index"`
 
 ## Debugging
 

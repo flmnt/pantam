@@ -3,15 +3,20 @@ from functools import reduce
 from importlib import import_module
 from inspect import getmembers, isfunction
 from re import match, sub
-from os import listdir
+from os import listdir, environ
 from starlette.applications import Starlette
 from starlette.routing import Route
+from uvicorn import run
 from .services import Logger
 
 
 class Config(TypedDict):
     actions_folder: str
     actions_index: str
+    debug: bool
+    dev_port: int
+    port: int
+    reload: Optional[bool]
 
 
 VERB = Literal["get", "post", "patch", "delete"]
@@ -88,12 +93,21 @@ class Pantam:
     logger: Final[Logger] = Logger()
 
     def __init__(
-        self, actions_folder="actions", actions_index="index", debug=False
+        self,
+        actions_folder="actions",
+        actions_index="index",
+        debug=False,
+        dev_port=5000,
+        port=5000,
+        reload=None,
     ) -> None:
-        self.debug: bool = debug
         self.config: Config = {
             "actions_folder": actions_folder,
             "actions_index": actions_index,
+            "debug": debug,
+            "dev_port": dev_port,
+            "port": port,
+            "reload": reload,
         }
         self.actions: List[ActionResource] = []
         self.routes: List[Route] = []
@@ -297,15 +311,30 @@ class Pantam:
         return self.routes
 
     def build(self) -> Optional[Starlette]:
-        """Run Pantam application"""
+        """Build Pantam application"""
+        config = self.get_config()
         self.discover_actions()
         self.load_actions()
         self.bind_routes()
         routes = self.get_routes()
-        if self.debug:
+        if config["debug"]:
             self.log_routes()
         try:
-            return Starlette(routes=routes, debug=self.debug)
+            return Starlette(routes=routes, debug=config["debug"])
         except:
             self.logger.error("Unable to build Pantam application!")
         return None
+
+    def run(self, file_name, app_name) -> None:
+        """Run Pantam application"""
+        config = self.get_config()
+        listen_port = (
+            config["port"]
+            if environ["POETRY_ENV"] == "production"
+            else config["dev_port"]
+        )
+        watch_reload = config["debug"] if config["reload"] is None else config["reload"]
+        try:
+            run("%s:%s" % (file_name, app_name), port=listen_port, reload=watch_reload)
+        except:
+            self.logger.error("Unable to build Pantam application!")
