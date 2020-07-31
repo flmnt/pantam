@@ -149,7 +149,7 @@ def init() -> None:
             write_msg(error_msg(" file exists, skipping"), NewLine.after)
 
     try:
-        write_msg(info_msg("Creating .bantamrc.js file..."))
+        write_msg(info_msg("Creating .pantamrc.json file..."))
         create_pantamrc_file(
             {
                 "actions_folder": actions_folder,
