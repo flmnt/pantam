@@ -3,7 +3,7 @@ from functools import reduce
 from importlib import import_module
 from inspect import getmembers, isfunction
 from re import match, sub
-from os import listdir, environ
+from os import listdir, getenv
 from starlette.applications import Starlette
 from starlette.routing import Route
 from uvicorn import run
@@ -330,8 +330,7 @@ class Pantam:
         config = self.get_config()
         listen_port = (
             config["port"]
-            if environ["POETRY_ENV"] is not None
-            and environ["POETRY_ENV"] == "production"
+            if getenv("PANTAM_ENV", default="development") == "production"
             else config["dev_port"]
         )
         watch_reload = config["debug"] if config["reload"] is None else config["reload"]
