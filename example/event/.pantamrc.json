@@ -1,1 +1,6 @@
-{"actions_folder": "actions", "entrypoint": "event.py"}
+{
+    "actions_folder": "actions",
+    "entrypoint": "event.py",
+    "port": 5000,
+    "dev_port": 5000
+}

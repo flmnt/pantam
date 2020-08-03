@@ -49,9 +49,9 @@ class Index:
         cursor = database.cursor()
         data = await request.form()
         cursor.execute("SELECT COUNT(*) FROM users")
-        count = int(cursor.fetchone())
+        count = cursor.fetchone()[0]
         cursor.execute(
-            "INSERT INTO users VALUES (?)",
+            "INSERT INTO users VALUES (?,?,?,?)",
             (count + 1, data["first_name"], data["last_name"], data["email"])
         )
         database.commit()
@@ -60,25 +60,33 @@ class Index:
 
     """
     TRY THIS:
-    curl --request PATCH 'http://localhost:5000/0' \
+    curl --request PATCH 'http://localhost:5000/1' \
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --data-urlencode 'last_name=Flanders'
     """
-    def update(self, request):
+    async def update(self, request):
         """Update an item"""
         database = sqlite3.connect("db")
+        database.row_factory = sqlite3.Row
         cursor = database.cursor()
         uid = request.path_params["id"]
         cursor.execute("SELECT * FROM users WHERE uid=?", (uid))
         user = cursor.fetchone()
-        data = await request.form()
-        user.update(data)
-        cursor.execute(
-            "UPDATE users set first_name = ?, last_name = ?, email = ? WHERE uid=?",
-            (user["first_name"], user["last_name"], user["email"], user["uid"])
-        )
-        database.commit()
-        return PlainTextResponse("Updated!")
+        if user is not None:
+            data = await request.form()
+            cursor.execute(
+                "UPDATE users set first_name = ?, last_name = ?, email = ? WHERE uid=?",
+                (
+                    data.get("first_name", user["first_name"]),
+                    data.get("last_name", user["last_name"]),
+                    data.get("email", user["email"]),
+                    user["uid"]
+                )
+            )
+            database.commit()
+            return PlainTextResponse("Updated!")
+        else:
+            return PlainTextResponse("User Not Found", status_code=404)
 
 
     """
@@ -89,6 +97,6 @@ class Index:
         database = sqlite3.connect("db")
         cursor = database.cursor()
         uid = request.path_params["id"]
-        cursor.execute("DELETE * FROM users WHERE uid=?", (uid))
+        cursor.execute("DELETE FROM users WHERE uid=?", (uid))
         database.commit()
         return PlainTextResponse("Deleted!")

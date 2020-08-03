@@ -29,7 +29,7 @@ With Pantam you can create a basic REST API in 5 minutes or less.
 
 ### Installation
 
-We recommend using [Poetry](https://python-poetry.org/) for dependency and environment management (this documentation will use Poetry throughout) but if you prefer `pip` or `conda` then crack on!
+We recommend using [Poetry](https://python-poetry.org/) with [Pyenv](https://github.com/pyenv/pyenv) for dependency and environment management (this documentation will use Poetry throughout) but if you prefer `pip` or `conda` then crack on!
 
 If you haven't done so already, setup your python environment and Poetry project:
 
