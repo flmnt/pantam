@@ -3,10 +3,9 @@ from functools import reduce
 from importlib import import_module
 from inspect import getmembers, isfunction
 from re import match, sub
-from os import listdir, getenv
+from os import listdir
 from starlette.applications import Starlette
 from starlette.routing import Route
-from uvicorn import run
 from .services import Logger
 
 
@@ -324,17 +323,3 @@ class Pantam:
         except:
             self.logger.error("Unable to build Pantam application!")
         return None
-
-    def run(self, file_name, app_name) -> None:
-        """Run Pantam application"""
-        config = self.get_config()
-        listen_port = (
-            config["port"]
-            if getenv("PANTAM_ENV", default="development") == "production"
-            else config["dev_port"]
-        )
-        watch_reload = config["debug"] if config["reload"] is None else config["reload"]
-        try:
-            run("%s:%s" % (file_name, app_name), port=listen_port, reload=watch_reload)
-        except:
-            self.logger.error("Unable to run Pantam application!")

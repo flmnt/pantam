@@ -1,14 +1,9 @@
-index_template = lambda file_name: """from pantam import Pantam
+index_template = lambda: """from pantam import Pantam
 
 pantam = Pantam(debug=True)
 
 app = pantam.build()
-
-if __name__ == "__main__":
-    pantam.run("{file_name}", "app")
-""".format(
-    file_name=file_name
-)
+"""
 
 
 action_template = lambda class_name: """from pantam import PlainTextResponse
