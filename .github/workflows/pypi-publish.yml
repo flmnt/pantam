@@ -5,19 +5,17 @@ on:
     types: [created]
 
 jobs:
-  pytest:
+  publish-after-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v1
       - uses: dschep/install-poetry-action@v1.3
-      - run: poetry run pytest
-
-  publish-pypi:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish package with Poetry
-        uses: JRubics/poetry-publish@v1.1
         with:
-          python_version: 3.8.2
-          pypi_token: ${{secrets.pypi_token}}
+          create_virtualenvs: true
+      - run: poetry install
+      - run: poetry run pytest
+      - name: Publish package
+        run: poetry publish --build
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{secrets.pypi_token}}
