@@ -15,7 +15,7 @@ Open a terminal and run the following: (you will need [Pyenv](https://github.com
 % pyenv local 3.8.2
 % poetry install
 % poetry shell
-% pantam serve
+% pantam serve --dev
 ```
 
 To test the example app out, in a new terminal, run:
@@ -41,7 +41,7 @@ Start by creating a new folder, initialising your app and install pantam with fe
 % poetry add pantam
 ```
 
-Next we'll use the pantam CLI to make our application.
+Next we'll use the Pantam CLI to make our application.
 
 ```
 % poetry shell
