@@ -40,11 +40,12 @@ description = "The microframework for microservices"
 name = "pantam"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.0.1a8"
+version = "0.0.1a11"
 
 [package.dependencies]
 PyInquirer = ">=1.0.3,<2.0.0"
 colored = ">=1.4.2,<2.0.0"
+python-multipart = ">=0.0.5,<0.0.6"
 shellingham = ">=1.3.2,<2.0.0"
 starlette = ">=0.13.6,<0.14.0"
 typer = ">=0.3.1,<0.4.0"
@@ -82,6 +83,17 @@ version = "1.0.3"
 Pygments = ">=2.2.0"
 prompt_toolkit = "1.0.14"
 regex = ">=2016.11.21"
+
+[[package]]
+category = "main"
+description = "A streaming multipart parser for Python"
+name = "python-multipart"
+optional = false
+python-versions = "*"
+version = "0.0.5"
+
+[package.dependencies]
+six = ">=1.4.0"
 
 [[package]]
 category = "main"
@@ -141,7 +153,7 @@ description = "The lightning-fast ASGI server."
 name = "uvicorn"
 optional = false
 python-versions = "*"
-version = "0.11.7"
+version = "0.11.8"
 
 [package.dependencies]
 click = ">=7.0.0,<8.0.0"
@@ -210,8 +222,8 @@ httptools = [
     {file = "httptools-0.1.1.tar.gz", hash = "sha256:41b573cf33f64a8f8f3400d0a7faf48e1888582b6f6e02b82b9bd4f0bf7497ce"},
 ]
 pantam = [
-    {file = "pantam-0.0.1a8-py3-none-any.whl", hash = "sha256:01bae49b8f6511f8ba8ba487db0b345abaf2ac39650f7d66aaf8254bbc6073fa"},
-    {file = "pantam-0.0.1a8.tar.gz", hash = "sha256:d38693b10cbaa2716a6ef86eecc7cabb359d58557ad274bf54ba7acb4c0aad38"},
+    {file = "pantam-0.0.1a11-py3-none-any.whl", hash = "sha256:5bcfaf61d54e212fafd746bb5b5659649fe87b8bab7e117b927973196ee9f695"},
+    {file = "pantam-0.0.1a11.tar.gz", hash = "sha256:33f4d4a7181c3032386794b947a85d3185b9f3a29dce499ab8bd385181a4beca"},
 ]
 prompt-toolkit = [
     {file = "prompt_toolkit-1.0.14-py2-none-any.whl", hash = "sha256:82c7f8e07d7a0411ff5367a5a8ff520f0112b9179f3e599ee8ad2ad9b943d911"},
@@ -224,6 +236,9 @@ pygments = [
 ]
 pyinquirer = [
     {file = "PyInquirer-1.0.3.tar.gz", hash = "sha256:c9a92d68d7727fbd886a7908c08fd9e9773e5dc211bf5cbf836ba90d366dee51"},
+]
+python-multipart = [
+    {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
 ]
 regex = [
     {file = "regex-2020.7.14-cp27-cp27m-win32.whl", hash = "sha256:e46d13f38cfcbb79bfdb2964b0fe12561fe633caf964a77a5f8d4e45fe5d2ef7"},
@@ -265,8 +280,8 @@ typer = [
     {file = "typer-0.3.1.tar.gz", hash = "sha256:85b1e5f6369750b4220ad548ea30b881a2c502504e5a0d849db9bdf6b487bdbf"},
 ]
 uvicorn = [
-    {file = "uvicorn-0.11.7-py3-none-any.whl", hash = "sha256:1d46a22cc55a52f5567e0c66f000ae56f26263e44cef59b7c885bf10f487ce6e"},
-    {file = "uvicorn-0.11.7.tar.gz", hash = "sha256:b50f7f4c0c499c9b8d0280924cfbd24b90ba02456e3dc80934b9a786a291f09f"},
+    {file = "uvicorn-0.11.8-py3-none-any.whl", hash = "sha256:4b70ddb4c1946e39db9f3082d53e323dfd50634b95fd83625d778729ef1730ef"},
+    {file = "uvicorn-0.11.8.tar.gz", hash = "sha256:46a83e371f37ea7ff29577d00015f02c942410288fb57def6440f2653fff1d26"},
 ]
 uvloop = [
     {file = "uvloop-0.14.0-cp35-cp35m-macosx_10_11_x86_64.whl", hash = "sha256:08b109f0213af392150e2fe6f81d33261bb5ce968a288eb698aad4f46eb711bd"},

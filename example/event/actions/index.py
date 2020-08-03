@@ -14,7 +14,7 @@ class Index:
 
     """
     TRY THIS:
-    curl --request POST 'http://localhost:3000/add-product-to-cart/' \
+    curl --request POST 'http://localhost:5000/add-product-to-cart/' \
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --data-urlencode 'product=Ducati Panigale' \
     --data-urlencode 'cost=25000'
@@ -25,17 +25,17 @@ class Index:
         cursor = database.cursor()
         data = await request.form()
         cursor.execute(
-            "INSERT INTO cart VALUES (?)",
+            "INSERT INTO cart VALUES (?,?)",
             (data["product"], data["cost"])
         )
         database.commit()
-        return PlainTextResponse
+        return PlainTextResponse("Added Cart")
 
 
     """
-    TRY THIS: curl --request GET 'http://localhost:3000/cart-contents/'
+    TRY THIS: curl --request GET 'http://localhost:5000/cart-contents/'
     """
-    def get_cart_contents(self):
+    def get_cart_contents(self, request):
         """Get cart contents"""
         database = sqlite3.connect("db")
         cursor = database.cursor()
@@ -44,11 +44,11 @@ class Index:
 
 
     """
-    TRY THIS: curl --request GET 'http://localhost:3000/cart-total/'
+    TRY THIS: curl --request GET 'http://localhost:5000/cart-total/'
     """
-    def get_cart_total(self):
+    def get_cart_total(self, request):
         """Get cart total value"""
         database = sqlite3.connect("db")
         cursor = database.cursor()
         cursor.execute("SELECT SUM(cost) FROM cart")
-        return PlainTextResponse(cursor.fetchone())
+        return PlainTextResponse(str(cursor.fetchone()[0]))

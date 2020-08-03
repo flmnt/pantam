@@ -6,3 +6,4 @@ __pycache__
 pantam.egg-info
 dist
 tmp
+db
