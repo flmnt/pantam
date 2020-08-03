@@ -135,25 +135,18 @@ Configure the application to live reload on a given port as follows:
 ```
 from pantam import Pantam
 
-pantam = Pantam(reload=True, dev_port=5001)
+pantam = Pantam(debug=True)
 
 app = pantam.build()
-
-if __name__ == "__main__":
-    pantam.run("main", "app")
 ```
 
 Then serve the app:
 
 ```
-% pantam serve
+% pantam serve --dev
 ```
 
-Your application will be served on http://localhost:5001
-
-In reload mode, when you make changes to files the application will update itself.
-
-_NB: If you turn `debug` on then `reload` is on by default._
+Your application will be served on http://localhost:5000
 
 _NB: Pantam looks for a `PANTAM_ENV` environment variable when serving the application and defaults to `development` if no variable is set._
 
@@ -178,7 +171,9 @@ After running `pantam init` you will have a `.pantamrc.json` file in your direct
 ```
 {
   "actions_folder": "actions",
-  "entrypoint": "example.py"
+  "entrypoint": "example.py",
+  "port": 5000,
+  "dev_port": 5000
 }
 ```
 
@@ -259,12 +254,12 @@ def fetch_all(self):
 
 ## Configuration Options
 
-For advanced configuration pass an options in when instantiating Pantam.
+For advanced configuration pass options in when instantiating Pantam.
 
 ```
 from pantam import Pantam
 
-pantam = Pantam(debug=True, port=80) # add options as below
+pantam = Pantam(debug=True) # add options as below
 
 app = pantam.build()
 
@@ -274,37 +269,11 @@ if __name__ == "__main__":
 
 You can set the following options:
 
-**port**: `integer`
-
-Sets the port number when serving the app in production mode.
-
-`Default: 5000`
-
-<br>
-
-**dev_port**: `integer`
-
-Sets the port number when serving the app in development mode.
-
-`Default: 5000`
-
-<br>
-
 **debug**: `bool`
 
-Turns debugging mode on for Pantam (and underlying Starlette). Provides more verbose error messages. Should be off in production. _If `reload` is not specified and `debug` is on, `reload` is also on._
+Turns debugging mode on for Pantam (and underlying Starlette). Provides more verbose error messages. Should be off in production.
 
 `Default: False`
-
-<br>
-
-**reload**: `bool` | `None`
-
-Turns reload mode on for Pantam. Application will restart when files change. _If `debug` is on, `reload` will be on by default, unless set to `False`._
-
-`Default: None`
-
-<br>
 
 **actions_folder**: `string`
 

@@ -40,7 +40,7 @@ description = "The microframework for microservices"
 name = "pantam"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.0.1a8"
+version = "0.0.1a9"
 
 [package.dependencies]
 PyInquirer = ">=1.0.3,<2.0.0"
@@ -210,8 +210,8 @@ httptools = [
     {file = "httptools-0.1.1.tar.gz", hash = "sha256:41b573cf33f64a8f8f3400d0a7faf48e1888582b6f6e02b82b9bd4f0bf7497ce"},
 ]
 pantam = [
-    {file = "pantam-0.0.1a8-py3-none-any.whl", hash = "sha256:01bae49b8f6511f8ba8ba487db0b345abaf2ac39650f7d66aaf8254bbc6073fa"},
-    {file = "pantam-0.0.1a8.tar.gz", hash = "sha256:d38693b10cbaa2716a6ef86eecc7cabb359d58557ad274bf54ba7acb4c0aad38"},
+    {file = "pantam-0.0.1a9-py3-none-any.whl", hash = "sha256:ec1b7d035366c97553fb3f86c35c1936db3a58bccce99edf61151fd313c027fa"},
+    {file = "pantam-0.0.1a9.tar.gz", hash = "sha256:e99615ddad8def1e45836719b38b4cba0bdf4c81a59d228e028f21bf6ea7f8d2"},
 ]
 prompt-toolkit = [
     {file = "prompt_toolkit-1.0.14-py2-none-any.whl", hash = "sha256:82c7f8e07d7a0411ff5367a5a8ff520f0112b9179f3e599ee8ad2ad9b943d911"},

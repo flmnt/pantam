@@ -119,7 +119,7 @@ def init() -> None:
 
     try:
         write_msg(info_msg("Creating %s file..." % index_file),)
-        create_file(index_file, index_template(index_file.replace(".py", "")))
+        create_file(index_file, index_template())
         create_file("__init__.py", "")
         write_msg(success_msg(" done!"), NewLine.after)
     except FileExistsError:
@@ -151,7 +151,12 @@ def init() -> None:
     try:
         write_msg(info_msg("Creating .pantamrc.json file..."))
         create_pantamrc_file(
-            {"actions_folder": actions_folder, "entrypoint": index_file,}
+            {
+                "actions_folder": actions_folder,
+                "entrypoint": index_file,
+                "port": 5000,
+                "dev_port": 5000,
+            }
         )
         write_msg(success_msg(" done!"), NewLine.after)
     except:

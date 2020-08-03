@@ -5,3 +5,4 @@ __pycache__
 .testmondata
 pantam.egg-info
 dist
+tmp
