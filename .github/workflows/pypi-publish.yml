@@ -1,0 +1,32 @@
+name: Build Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: 3.8.2
+          poetry_version: 1.0.10
+          args: install
+      - name: Run pytest
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: 3.8.2
+          poetry_version: 1.0.10
+          args: run python pytest
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish python poetry package
+        uses: JRubics/poetry-publish@v1.1
+        with:
+          python_version: 3.8.2
+          pypi_token: ${{secrets.pypi_token}}
