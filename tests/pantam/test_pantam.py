@@ -117,6 +117,9 @@ class MockAction:
     def set_custom(self) -> None:
         pass
 
+    def do_custom(self) -> None:
+        pass
+
     def __private_method(self) -> None:
         pass
 
@@ -193,7 +196,7 @@ def test_introspect_methods():
     methods = introspect_methods(MockAction)
     assert methods == {
         "get": ["fetch_all", "fetch_single", "get_custom"],
-        "post": ["create", "set_custom"],
+        "post": ["create", "do_custom", "set_custom"],
         "patch": ["update"],
         "delete": ["delete"],
     }
@@ -231,6 +234,7 @@ def test_make_routes():
         {"method": "fetch_single", "url": "/{id}", "verb": "get",},
         {"method": "get_custom", "url": "/custom/", "verb": "get",},
         {"method": "create", "url": "/", "verb": "post",},
+        {"method": "do_custom", "url": "/custom/{id}", "verb": "post",},
         {"method": "set_custom", "url": "/custom/", "verb": "post",},
         {"method": "update", "url": "/{id}", "verb": "patch",},
         {"method": "delete", "url": "/{id}", "verb": "delete",},

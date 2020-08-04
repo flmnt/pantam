@@ -206,6 +206,15 @@ def set_custom_method(self, request):
   # your code here
 ```
 
+From version 0.1.0 onwards you can also create a `do` method, which is custom post method that also expects an identifier as part of the url.
+
+```
+// POST -> /custom-method/{id}
+def do_custom_method(self, request):
+  print(request)
+  # your code here
+```
+
 Pantam will ignore methods that are not "standard" methods or do not start with `get` or `set`. However if you want to _ensure_ that your method will be ignored you can prefix the method with a double underscore, like this:
 
 ```

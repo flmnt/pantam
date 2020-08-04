@@ -44,13 +44,13 @@ class Methods(TypedDict):
 
 
 GET_METHOD_RE = r"^(get\w*|fetch_all|fetch_single)$"
-POST_METHOD_RE = r"^(set\w*|create)$"
+POST_METHOD_RE = r"^(set\w*|do\w*|create)$"
 PATCH_METHOD_RE = r"^update$"
 DELETE_METHOD_RE = r"^delete$"
 
-INDI_RES_RE = r"^(fetch_single|update|delete)$"
+INDI_RES_RE = r"^(fetch_single|update|delete|do\w*)$"
 
-CUSTOM_METHOD_RE = r"^[g|s]et\w*$"
+CUSTOM_METHOD_RE = r"^(get|set|do)\w*$"
 
 
 def introspect_methods(action_class: Callable[[], Any]) -> Methods:
@@ -237,13 +237,13 @@ class Pantam:
         """Create URL for action routes"""
         actions_index = self.get_config()["actions_index"]
         url = "/" if actions_index == module_name else "/%s/" % module_name
+        is_custom_method = match(CUSTOM_METHOD_RE, method)
+        if is_custom_method:
+            slug = sub(r"^(get|set|do)_", "", method).replace("_", "-").lower()
+            url = "%s%s/" % (url, slug)
         is_individual_res = match(INDI_RES_RE, method)
         if is_individual_res:
             url = "%s{id}" % url
-        is_custom_method = match(CUSTOM_METHOD_RE, method)
-        if is_custom_method:
-            slug = sub(r"^[g|s]et_", "", method).replace("_", "-").lower()
-            url = "%s%s/" % (url, slug)
         return url
 
     def make_routes(
