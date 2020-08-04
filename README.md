@@ -206,7 +206,7 @@ def set_custom_method(self, request):
   # your code here
 ```
 
-From version 0.1.0 onwards you can also create a `do` method, which is custom post method that also expects an identifier as part of the url.
+From version 0.1.0 onwards you can also create a `do` method, which is a custom post method that also expects an identifier as part of the url.
 
 ```
 // POST -> /custom-method/{id}
