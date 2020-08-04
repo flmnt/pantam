@@ -3,6 +3,7 @@ from .pantam import Pantam, introspect_methods
 
 Request = requests.Request
 
+Response = responses.Response
 JSONResponse = responses.JSONResponse
 HTMLResponse = responses.HTMLResponse
 PlainTextResponse = responses.PlainTextResponse
