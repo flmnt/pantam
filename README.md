@@ -89,16 +89,16 @@ class Index:
   def fetch_all(self):
     pass
 
-  def fetch_single(self, uid):
+  def fetch_single(self, request):
     pass
 
-  def create(self, data):
+  def create(self, request):
     pass
 
-  def update(self, uid, data):
+  def update(self, request):
     pass
 
-  def delete(self, uid):
+  def delete(self, request):
     pass
 ```
 
@@ -106,10 +106,10 @@ class Index:
 
 ```
 class Other:
-  def fetch_single(self, uid):
+  def fetch_single(self, request):
     pass
 
-  def create(self, data):
+  def create(self, request):
     pass
 ```
 
@@ -117,12 +117,12 @@ The setup above will make the following routes available:
 
 ```
 GET      /            // Index.fetch_all()
-GET      /:id         // Index.fetch_single()
+GET      /{id}         // Index.fetch_single()
 POST     /            // Index.create()
-PATCH    /:id         // Index.update()
-DELETE   /:id         // Index.delete()
+PATCH    /{id}         // Index.update()
+DELETE   /{id}         // Index.delete()
 
-GET      /other/:id   // Other.fetch_single()
+GET      /other/{id}   // Other.fetch_single()
 POST     /other       // Other.create()
 ```
 
@@ -201,8 +201,8 @@ And custom setters like this:
 
 ```
 // POST -> /custom-method/
-def set_custom_method(self, data):
-  print(data)
+def set_custom_method(self, request):
+  print(request)
   # your code here
 ```
 
@@ -309,7 +309,7 @@ In the example below the url `test/1` and `test/custom-method` both trigger `fet
 // actions/test.py
 
 // GET -> test/custom-method
-// GET -> test/:id
+// GET -> test/{id}
 fetch_single()
 
 // GET -> test/custom-method/
