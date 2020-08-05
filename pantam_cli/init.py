@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import Any, List, Union
 from os import getcwd, path
 from pathlib import Path
-from PyInquirer import prompt
+from re import sub
+from prompt_toolkit import prompt
 from pantam_cli.utils.filesystem import (
     create_file,
     create_folder,
@@ -28,6 +29,20 @@ from pantam_cli.utils.templates import action_template, index_template
 from pantam_cli.utils.errors import CancelError
 from pantam_cli.utils import clear
 
+def create_prompt(question: str, default: Union[str, bool]) -> Any:
+    """Create an interactive prompt"""
+    is_confirm = isinstance(default, bool)
+    if is_confirm:
+        default = "Y/n" if default else "y/N"
+    answer = prompt("%s (%s) " % (question, default))
+    if not answer and is_confirm:
+        not_yes_no = r"[^YN]"
+        answer = sub(not_yes_no, "", default)
+    if not answer:
+        answer = default
+    if is_confirm:
+        return answer in ["Y", "y"]
+    return answer
 
 def init() -> None:
     """Setup Pantam project"""
@@ -37,55 +52,23 @@ def init() -> None:
 
     folder_name = path.basename(getcwd())
 
-    answers = prompt(
-        [
-            {
-                "type": "input",
-                "name": "index_file",
-                "message": name_index_file_msg(),
-                "default": "%s.py" % folder_name,
-            },
-            {
-                "type": "input",
-                "name": "actions_folder",
-                "message": name_actions_folder_msg(),
-                "default": "actions",
-            },
-            {
-                "type": "confirm",
-                "name": "create_actions_file",
-                "message": create_actions_file_msg(False),
-                "default": True,
-            },
-        ]
-    )
-
-    index_file = answers["index_file"]
-    actions_folder = answers["actions_folder"]
-    do_create_action_files = answers["create_actions_file"]
+    index_file = create_prompt(name_index_file_msg(), "%s.py" % folder_name)
+    actions_folder = create_prompt(name_actions_folder_msg(), "actions")
+    do_create_action_files = create_prompt(create_actions_file_msg(False), True)
 
     action_files: List[str] = []
 
     while do_create_action_files:
-        answers = prompt(
-            [
-                {
-                    "type": "input",
-                    "name": "actions_file",
-                    "message": name_actions_file_msg(),
-                    "default": "index.py" if len(action_files) == 0 else "",
-                },
-                {
-                    "type": "confirm",
-                    "name": "create_actions_file",
-                    "message": create_actions_file_msg(True),
-                    "default": False,
-                },
-            ]
+        actions_file = create_prompt(
+            name_actions_file_msg(),
+            "index.py" if len(action_files) == 0 else ""
         )
-        if answers["actions_file"] not in action_files:
-            action_files.append(answers["actions_file"])
-        do_create_action_files = answers["create_actions_file"]
+        if actions_file not in action_files:
+            action_files.append(actions_file)
+        do_create_action_files = create_prompt(
+             create_actions_file_msg(True),
+             False
+         )
 
     action_files_map = list(map(lambda file_name: "|  |  %s" % file_name, action_files))
     action_files_flat = "\n".join(action_files_map)
@@ -99,18 +82,12 @@ def init() -> None:
         actions_files=action_files_flat,
     )
 
-    answers = prompt(
-        [
-            {
-                "type": "confirm",
-                "name": "confirm",
-                "message": confirm_structure_msg(structure),
-                "default": True,
-            },
-        ]
+    confirm = create_prompt(
+        confirm_structure_msg(structure),
+        True
     )
 
-    if not answers["confirm"]:
+    if not confirm:
         raise CancelError("Cancelled!")
 
     write_msg(
