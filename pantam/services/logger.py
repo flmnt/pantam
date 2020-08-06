@@ -15,14 +15,18 @@ class Logger:
 
     def info(self, message: str) -> None:
         """Print info message."""
-        self.info_logger(PANTAM + fg("blue") + attr("bold") + message + attr("reset"))
+        self.info_logger.info(
+            PANTAM + fg("blue") + attr("bold") + message + attr("reset")
+        )
 
     def success(self, message: str) -> None:
         """Print success message"""
-        self.success_logger(
+        self.success_logger.info(
             PANTAM + fg("green") + attr("bold") + message + attr("reset")
         )
 
     def error(self, message: str) -> None:
         """Print error message"""
-        self.error_logger(PANTAM + fg("red") + attr("bold") + message + attr("reset"))
+        self.error_logger.error(
+            PANTAM + fg("red") + attr("bold") + message + attr("reset")
+        )
