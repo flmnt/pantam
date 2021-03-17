@@ -5,6 +5,7 @@ from inspect import getmembers, isfunction
 from re import match, sub
 from os import listdir
 from starlette.applications import Starlette
+from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 from .services import Logger
 
@@ -12,6 +13,7 @@ from .services import Logger
 class Config(TypedDict):
     actions_folder: str
     actions_index: str
+    on_shutdown: Callable
     debug: bool
     dev_port: int
     port: int
@@ -95,6 +97,7 @@ class Pantam:
         self,
         actions_folder="actions",
         actions_index="index",
+        on_shutdown=None,
         debug=False,
         dev_port=5000,
         port=5000,
@@ -103,6 +106,7 @@ class Pantam:
         self.config: Config = {
             "actions_folder": actions_folder,
             "actions_index": actions_index,
+            "on_shutdown": on_shutdown,
             "debug": debug,
             "dev_port": dev_port,
             "port": port,
@@ -177,6 +181,10 @@ class Pantam:
                         )
                     )
                 )
+
+        routes_to_log.append(
+            " -> ".join((column_format("GET", 6), "/healthz [health check endpoint]",))
+        )
 
         self.logger.info("\n".join(routes_to_log))
 
@@ -295,6 +303,14 @@ class Pantam:
                             methods=prepare_verb(route["verb"]),
                         )
                     )
+
+                starlette_routes.append(
+                    Route(
+                        "/healthz",
+                        lambda: PlainTextResponse("👋"),
+                        methods=prepare_verb("get"),
+                    )
+                )
             except:
                 self.logger.error(
                     "Unable to bind `%s` action methods to route."
@@ -309,6 +325,11 @@ class Pantam:
             self.logger.error("No routes have been defined.")
         return self.routes
 
+    def handle_shutdown(self) -> None:
+        """Offer shutdown callback to users"""
+        config = self.get_config()
+        config.on_shutdown()
+
     def build(self) -> Optional[Starlette]:
         """Build Pantam application"""
         config = self.get_config()
@@ -319,7 +340,9 @@ class Pantam:
         if config["debug"]:
             self.log_routes()
         try:
-            return Starlette(routes=routes, debug=config["debug"])
+            return Starlette(
+                routes=routes, debug=config["debug"], on_shutdown=self.handle_shutdown,
+            )
         except:
             self.logger.error("Unable to build Pantam application!")
         return None

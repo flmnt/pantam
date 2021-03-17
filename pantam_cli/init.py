@@ -29,6 +29,7 @@ from pantam_cli.utils.templates import action_template, index_template
 from pantam_cli.utils.errors import CancelError
 from pantam_cli.utils import clear
 
+
 def create_prompt(question: str, default: Union[str, bool]) -> Any:
     """Create an interactive prompt"""
     is_confirm = isinstance(default, bool)
@@ -43,6 +44,7 @@ def create_prompt(question: str, default: Union[str, bool]) -> Any:
     if is_confirm:
         return answer in ["Y", "y"]
     return answer
+
 
 def init() -> None:
     """Setup Pantam project"""
@@ -60,15 +62,11 @@ def init() -> None:
 
     while do_create_action_files:
         actions_file = create_prompt(
-            name_actions_file_msg(),
-            "index.py" if len(action_files) == 0 else ""
+            name_actions_file_msg(), "index.py" if len(action_files) == 0 else ""
         )
         if actions_file not in action_files:
             action_files.append(actions_file)
-        do_create_action_files = create_prompt(
-             create_actions_file_msg(True),
-             False
-         )
+        do_create_action_files = create_prompt(create_actions_file_msg(True), False)
 
     action_files_map = list(map(lambda file_name: "|  |  %s" % file_name, action_files))
     action_files_flat = "\n".join(action_files_map)
@@ -82,10 +80,7 @@ def init() -> None:
         actions_files=action_files_flat,
     )
 
-    confirm = create_prompt(
-        confirm_structure_msg(structure),
-        True
-    )
+    confirm = create_prompt(confirm_structure_msg(structure), True)
 
     if not confirm:
         raise CancelError("Cancelled!")

@@ -1,9 +1,11 @@
-index_template = lambda: """from pantam import Pantam
+index_template = (
+    lambda: """from pantam import Pantam
 
 pantam = Pantam(debug=True)
 
 app = pantam.build()
 """
+)
 
 
 action_template = lambda class_name: """from pantam import PlainTextResponse

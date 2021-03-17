@@ -298,6 +298,14 @@ The primary action file in your action folder.
 
 `Default: "index"`
 
+<br>
+
+**on_shutdown**: `function`
+
+Function called prior to shutdown.
+
+`Default: None`
+
 ## Debugging
 
 If you're struggling to debug and issue and unsure what routes Pantam has created for you, set the `debug` option to True.

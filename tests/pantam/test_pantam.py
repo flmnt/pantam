@@ -9,45 +9,50 @@ def test_get_default_options():
     default_config = {
         "actions_folder": "actions",
         "actions_index": "index",
+        "on_shutdown": None,
         "debug": False,
         "dev_port": 5000,
         "port": 5000,
-        "reload": None
+        "reload": None,
     }
     assert app.get_config() == default_config
 
 
 def test_override_some_options():
     app = Pantam(actions_folder="axs")
-    default_config = {
+    config = {
         "actions_folder": "axs",
         "actions_index": "index",
+        "on_shutdown": None,
         "debug": False,
         "dev_port": 5000,
         "port": 5000,
-        "reload": None
+        "reload": None,
     }
-    assert app.get_config() == default_config
+    assert app.get_config() == config
 
 
 def test_override_all_options():
+    callback = lambda: True
     app = Pantam(
         actions_folder="axs",
         actions_index="main",
+        on_shutdown=callback,
         debug=True,
         dev_port=5001,
         port=80,
-        reload=False
+        reload=False,
     )
-    default_config = {
+    config = {
         "actions_folder": "axs",
         "actions_index": "main",
+        "on_shutdown": callback,
         "debug": True,
         "dev_port": 5001,
         "port": 80,
-        "reload": False
+        "reload": False,
     }
-    assert app.get_config() == default_config
+    assert app.get_config() == config
 
 
 def test_set_options_programmatically():
@@ -145,7 +150,8 @@ def test_log_routes(logger_mock):
         """Available Routes:
 
 GET    -> /    -> index.py -> fetchAll
-GET    -> /:id -> index.py -> fetchSingle"""
+GET    -> /:id -> index.py -> fetchSingle
+GET    -> /healthz [health check endpoint]"""
     )
 
 
@@ -285,9 +291,10 @@ def test_bind_routes():
         ]
     )
     app.bind_routes()
-    assert len(app.routes) == 2
+    assert len(app.routes) == 3
     assert app.routes[0].path == "/"
     assert app.routes[1].path == "/{id}"
+    assert app.routes[2].path == "/healthz"
 
 
 @patch("pantam.pantam.Logger.error")
