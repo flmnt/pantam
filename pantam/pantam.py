@@ -110,7 +110,7 @@ class Pantam:
             "port": port,
             "reload": reload,
         }
-        self.logger: Final[Logger] = Logger(debug=debug)
+        self.logger: Final[Logger] = Logger()
         self.actions: List[ActionResource] = []
         self.routes: List[Route] = []
 
@@ -341,7 +341,9 @@ class Pantam:
             self.log_routes()
         try:
             return Starlette(
-                routes=routes, debug=config["debug"], on_shutdown=self.handle_shutdown,
+                routes=routes,
+                debug=config["debug"],
+                on_shutdown=[self.handle_shutdown],
             )
         except:
             self.logger.error("Unable to build Pantam application!")

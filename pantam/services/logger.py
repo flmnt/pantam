@@ -1,5 +1,4 @@
 from logging import getLogger
-from traceback import format_exc
 from sys import stdout
 from colored import fg, attr
 
@@ -13,9 +12,8 @@ def write(colour: str, msg: str) -> None:
 
 
 class Logger:
-    def __init__(self, debug=False) -> None:
+    def __init__(self) -> None:
         self.logger = getLogger("pantam")
-        self.debug = debug
 
     def info(self, message: str) -> None:
         """Print info message."""
@@ -29,7 +27,5 @@ class Logger:
 
     def error(self, message: str) -> None:
         """Print error message"""
-        if self.debug:
-            format_exc()
         self.logger.error(message)
         write("red", message)
