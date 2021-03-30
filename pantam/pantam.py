@@ -91,8 +91,6 @@ def introspect_methods(action_class: Callable[[], Any]) -> Methods:
 
 
 class Pantam:
-    logger: Final[Logger] = Logger()
-
     def __init__(
         self,
         actions_folder="actions",
@@ -112,6 +110,7 @@ class Pantam:
             "port": port,
             "reload": reload,
         }
+        self.logger: Final[Logger] = Logger(debug=debug)
         self.actions: List[ActionResource] = []
         self.routes: List[Route] = []
 
