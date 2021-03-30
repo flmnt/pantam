@@ -183,6 +183,13 @@ def test_import_action_module(logger_mock):
     logger_mock.assert_called_with("Unable to load `actions.index` module.")
 
 
+@patch("pantam.pantam.Logger.error")
+def test_import_custom_action_module(logger_mock):
+    app = Pantam(actions_folder="test/actions")
+    app.import_action_module("index", "Index")
+    logger_mock.assert_called_with("Unable to load `test.actions.index` module.")
+
+
 def test_load_actions():
     app = Pantam()
     app.read_actions_folder = Mock(return_value=["index.py"])  # type: ignore

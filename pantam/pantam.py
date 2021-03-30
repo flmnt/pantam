@@ -212,12 +212,13 @@ class Pantam:
         """Load an action file"""
         try:
             actions_folder = self.get_config()["actions_folder"]
-            action_module: Any = import_module("%s.%s" % (actions_folder, module_name))
+            module_path = actions_folder.replace("/", ".")
+            action_module: Any = import_module("%s.%s" % (module_path, module_name))
             action_class: Any = getattr(action_module, class_name)
             return action_class
         except:
             self.logger.error(
-                "Unable to load `%s.%s` module." % (actions_folder, module_name)
+                "Unable to load `%s.%s` module." % (module_path, module_name)
             )
             return None
 
