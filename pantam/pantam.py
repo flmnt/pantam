@@ -307,7 +307,7 @@ class Pantam:
                 starlette_routes.append(
                     Route(
                         "/healthz",
-                        lambda: PlainTextResponse("👋"),
+                        lambda *args, **kwargs: PlainTextResponse("👋"),
                         methods=prepare_verb("get"),
                     )
                 )
