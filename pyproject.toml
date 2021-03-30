@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pantam"
-version = "1.0.0"
+version = "1.0.1"
 description = "The microframework for microservices"
 authors = ["Matt Davies <matt@filament.so>"]
 license = "MIT"
