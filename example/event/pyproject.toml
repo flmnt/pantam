@@ -2,11 +2,11 @@
 name = "event"
 version = "0.1.0"
 description = ""
-authors = ["Matt Davies <matt@teamdavies.co.uk>"]
+authors = ["Matt Davies <matt@filament.so>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pantam = "^0.0.1-alpha.5"
+pantam = "^1.0.3"
 
 [tool.poetry.dev-dependencies]
 
