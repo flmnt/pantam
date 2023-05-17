@@ -1,1 +1,2 @@
 pantam<0.0.2,>=0.0.1-alpha.4
+starlette>=0.27.0 # not directly required, pinned by Snyk to avoid a vulnerability
